@@ -9,11 +9,6 @@ if (!isset($_POST['username']) || !isset($_POST['password'])) {
     exit;
 }
     
-    $username = $_POST['username'];
-    $password = $_POST['password'];
-
-    
-
     if (($username === $username_valid) && ($password === $password_valid)) {
         
         $_SESSION['login'][] = [
@@ -22,16 +17,24 @@ if (!isset($_POST['username']) || !isset($_POST['password'])) {
             "login_at" => date("Y-m-d H:i:s")
         ];
 
-        // jika benar
-        echo "selamat datang : " . $username . " anda teah login sebanyak: " . count($_SESSION['login']) . " kali";
+if (($username === $username_valid) && ($password === $password_valid)) {
 
-        echo '<br>';
+    $_SESSION['login'][] = [
+        "username" => $username,
+        "password" => $password,
+        "login_at" => date("Y-m-d H:i:s")
+    ];
 
-        echo '<a href="logout.php">Logout</a>';
+    // jika benar
+    echo "selamat datang : " . $username . " anda teah login sebanyak: " . count($_SESSION['login']) . " kali";
 
-        echo '<pre>';
-        var_dump($_SESSION['login']);
-    }else{
-        // jika salah
-        echo "username atau password salah";
-    }
+    echo '<br>';
+
+    echo '<a href="logout.php">Logout</a>';
+
+    echo '<pre>';
+    var_dump($_SESSION['login']);
+} else {
+    // jika salah
+    echo "username atau password salah";
+}
