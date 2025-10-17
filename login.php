@@ -1,5 +1,7 @@
 <?php
 session_start();
+date_default_timezone_set('Asia/Jakarta');
+
 $username_valid = "unnes";
 $password_valid = "12345";
 
@@ -8,27 +10,29 @@ if (!isset($_POST['username']) || !isset($_POST['password'])) {
     exit;
 }
     
-    $username = $_POST['username'];
-    $password = $_POST['password'];
+$username = trim($_POST['username']); 
+$password = $_POST['password'];
 
-    if (($username === $username_valid) && ($password === $password_valid)) {
-        
-        $_SESSION['login'] = [
-            "username" => $username,
-            "password" => $password,
-            "login_at" => date("Y-m-d H:i:s")
-        ];
+if (($username === $username_valid) && ($password === $password_valid)) {
+    session_regenerate_id(true);
 
-        // jika benar
-        echo "selamat datang : " . $username . " anda teah login sebanyak: " . count($_SESSION['login']) . " kali";
+    $_SESSION['user'] = [
+        "username" => $username,
+        "login_at" => date("Y-m-d H:i:s") 
+    ];
 
-        echo '<br>';
+    $_SESSION['login_count'] = ($_SESSION['login_count'] ?? 0) + 1;
 
-        echo '<a href="logout.php">Logout</a>';
+    echo "Selamat datang : " . htmlspecialchars($username) . 
+         " anda telah login sebanyak: " . $_SESSION['login_count'] . " kali<br>";
+    echo "Login pada: " . date("H:i:s") . " WIB<br>"; 
+    echo '<br>';
+    echo '<a href="index.html">Back</a><br>';
+    echo '<a href="logout.php">Logout</a>';
 
-        echo '<pre>';
-        var_dump($_SESSION['login']);
-    }else{
-        // jika salah
-        echo "username atau password salah";
-    }
+} else {
+    $_SESSION['error'] = "Username atau password salah";
+    header("Location: login.html");
+    exit;
+}
+?>
